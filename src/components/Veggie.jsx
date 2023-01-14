@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Splide, SplideSlide } from '@splidejs/react-splide'
 // import'@slidejs/slide/dist/css/splide.min.css'
 import '@splidejs/splide/css'
+import { Link } from 'react-router-dom'
 
 
 function Veggie() {
@@ -13,21 +14,14 @@ function Veggie() {
   }, [])
   const getVeggie = async () => {
 
-    const check = localStorage.getItem('veggie');
-
-    if(check) {
-      setVeggie(JSON.parse(check))
-    } else {
       const api_key = 'f849132ea36047479347ab80d1421f7b'
       const api = await fetch(
         `https://api.spoonacular.com/recipes/random?apiKey=${api_key}&number=9&tags=vegetarian`
         )
         const data = await api.json()
 
-        localStorage.setItem('veggie', JSON.stringify(data.recipes))
         setVeggie(data.recipes)
         console.log(data.recipes)
-    }
   }
   return (
     <div>
@@ -46,9 +40,11 @@ function Veggie() {
             return (
               <SplideSlide key={recipe.id}>
                 <Card>
+                  <Link to={'/recipe/' + recipe.id}>
                   <p>{recipe.title}</p>
                   <img src={recipe.image} alt={recipe.title} />
                   <Gradient/>
+                  </Link>
                 </Card>
               </SplideSlide>
             )
@@ -101,6 +97,6 @@ const Gradient = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5))
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
 `
 export default Veggie
